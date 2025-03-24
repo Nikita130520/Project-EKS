@@ -6,7 +6,7 @@ module "eks" {
 
   vpc_config = {
     subnet_ids = [
-      "subnet-0190bf6903dea0c87"
+      "subnet-0190bf6903dea0c87",
       "subnet-02dc6d86a5bf19dbb"
     ]
   }
