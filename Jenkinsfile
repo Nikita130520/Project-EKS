@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/your-repo/terraform-eks.git'
-            }
-        }
-
         stage('Setup AWS Credentials') {
             steps {
                 withAWS(credentials: 'AWS_CREDENTIALS', region: "${AWS_REGION}") {
