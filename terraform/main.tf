@@ -10,12 +10,12 @@ module "eks" {
   ]
 
 
-    node_groups = {
+  eks_managed_node_groups = {
     eks_nodes = {
-      desired_capacity = 2
-      max_capacity     = 3
-      min_capacity     = 1
-      instance_types   = ["t3.medium"]
+      desired_size  = 2
+      max_size      = 3
+      min_size      = 1
+      instance_types = ["t3.medium"]
     }
   }
 }
