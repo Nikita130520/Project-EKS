@@ -1,30 +1,22 @@
-# Fetch the default VPC
-data "aws_vpc" "default" {
-  default = true
-}
-
-# Fetch the default subnets
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = var.cluster_name
+  cluster_name    = "jenkins-eks-cluster"
   cluster_version = "1.27"
-  subnets         = data.aws_subnets.default.ids
-  vpc_id          = data.aws_vpc.default.id
+  vpc_id          = "vpc-02ed5a76fdcf53cf0"
+
+  vpc_config = {
+    subnet_ids = [
+      "subnet-0190bf6903dea0c87"
+      "subnet-02dc6d86a5bf19dbb"
+    ]
+  }
 
   node_groups = {
     eks_nodes = {
-      desired_capacity = var.desired_capacity
-      max_capacity     = var.max_capacity
-      min_capacity     = var.min_capacity
-      instance_types   = [var.node_instance_type]
+      desired_capacity = 2
+      max_capacity     = 3
+      min_capacity     = 1
+      instance_types   = ["t3.medium"]
     }
   }
 }
-
