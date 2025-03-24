@@ -75,4 +75,12 @@ pipeline {
             echo "❌ Deployment Failed! Check logs for details."
         }
     }
+    stage('destroy Terraform') {
+            steps {
+                sh '''
+                cd terraform
+                terraform destroy -auto-approv
+                '''
+            }
+        }
 }
