@@ -39,11 +39,11 @@ pipeline {
             }
         }
 
-        stage('destroy Terraform') {
+        stage('apply Terraform') {
             steps {
                 sh '''
                 cd terraform
-                terraform destroy -auto-approve
+                terraform apply -auto-approve
                 '''
             }
         }
