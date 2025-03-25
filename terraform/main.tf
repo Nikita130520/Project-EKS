@@ -9,6 +9,7 @@ module "eks" {
     "subnet-02dc6d86a5bf19dbb"
   ]
 
+
   # Use custom security group
   cluster_security_group_id = aws_security_group.eks_sg.id
 
