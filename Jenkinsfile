@@ -43,19 +43,11 @@ pipeline {
             steps {
                 sh '''
                 cd terraform
-                terraform destroy -auto-approve
+                terraform apply -auto-approve
                 '''
             }
         }
 
-        stage('Configure Kubeconfig') {
-            steps {
-                sh '''
-                aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-                kubectl cluster-info
-                '''
-            }
-        }
 
         stage('Deploy to EKS') {
             steps {
