@@ -43,7 +43,7 @@ pipeline {
             steps {
                 sh '''
                 cd terraform
-                terraform detroy -auto-approve
+                terraform destroy -auto-approve
                 '''
             }
         }
