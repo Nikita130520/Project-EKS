@@ -48,23 +48,4 @@ pipeline {
             }
         }
 
-
-        stage('Deploy to EKS') {
-            steps {
-                sh '''
-                kubectl apply -f kubernetes/deployment.yaml
-                kubectl apply -f kubernetes/service.yaml
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "✅ Deployment Successful!"
-        }
-        failure {
-            echo "❌ Deployment Failed! Check logs for details."
-        }
-    }
 }
