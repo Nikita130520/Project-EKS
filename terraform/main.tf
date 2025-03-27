@@ -1,8 +1,16 @@
+data "aws_iam_role" "iam_role" {
+  role_name = "AmazonEKSAutoClusterRole"
+}
+data "aws_iam_role" "iam_node_role" {
+  role_name = "AmazonEKSAutoNodeRole"
+}
+
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "jenkins-eks-cluster"
   cluster_version = "1.27"
   vpc_id          = "vpc-02ed5a76fdcf53cf0"
+  iam_role = data.aws_iam_role.iam_role.arn
 
   subnet_ids = [
     "subnet-0190bf6903dea0c87",
@@ -20,6 +28,7 @@ module "eks" {
       max_size      = 3
       min_size      = 1
       instance_types = ["t3.medium"]
+      iam_role = data.aws_iam_role.iam_node_role.arn
     
       # Attach security group to nodes
       node_security_group_tags = {
