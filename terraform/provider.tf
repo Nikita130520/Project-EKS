@@ -8,6 +8,10 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
+data "aws_eks_cluster" "eks" {
+  name = "jenkins-eks-cluster"
+}
+
 data "aws_eks_cluster_auth" "eks" {
-  name = aws_eks_cluster.eks.name
+  name = data.aws_eks_cluster.eks.name
 }
