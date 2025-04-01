@@ -10,14 +10,9 @@ pipeline {
     stages {
         stage('Setup AWS Credentials') {
             steps {
-                sh '''
-                echo "$AWS_CREDENTIALS" > aws_credentials.txt
-                export $(cat aws_credentials.txt | xargs)
-                aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                aws configure set region $AWS_REGION
-                rm -f aws_credentials.txt
-                '''
+                withCredentials([aws(credentialsId: 'AWS_CREDENTIALS', region: 'ap-south-1')]) {
+                    sh 'aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME'
+                }
             }
         }
 
