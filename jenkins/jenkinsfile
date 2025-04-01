@@ -2,18 +2,12 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'
+        AWS_REGION = 'ap-south-1'
         CLUSTER_NAME = 'jenkins-eks-cluster'
         AWS_CREDENTIALS = credentials('AWS_CREDENTIALS') // Load AWS keys
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/your-repo/terraform-eks.git'
-            }
-        }
-
         stage('Setup AWS Credentials') {
             steps {
                 sh '''
@@ -27,47 +21,18 @@ pipeline {
             }
         }
 
-        stage('Initialize Terraform') {
+   stage('Deploy to EKS') {
             steps {
-                sh 'terraform init'
+                sh 'kubectl apply -f deployment.yml'
+                sh 'kubectl apply -f service.yml'
             }
         }
 
-        stage('Plan Terraform') {
+        stage('Verify Deployment') {
             steps {
-                sh 'terraform plan -out=tfplan'
+                sh 'kubectl get pods'
+                sh 'kubectl get svc'
             }
-        }
-
-        stage('Apply Terraform') {
-            steps {
-                sh 'terraform apply -auto-approve'
-            }
-        }
-
-        stage('Configure Kubeconfig') {
-            steps {
-                sh '''
-                aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-                kubectl cluster-info
-                '''
-            }
-        }
-
-        stage('Deploy to EKS') {
-            steps {
-                sh 'kubectl apply -f kubernetes/deployment.yaml'
-                sh 'kubectl apply -f kubernetes/service.yaml'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "Deployment Successful!"
-        }
-        failure {
-            echo "Deployment Failed!"
         }
     }
 }
