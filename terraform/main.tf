@@ -3,7 +3,7 @@ data "aws_eks_cluster" "eks" {
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = data.jenkins-eks-cluster.name
+  name = data.aws_eks_cluster.eks.name
 }
 
 module "eks" {
