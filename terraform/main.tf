@@ -1,3 +1,10 @@
+data "aws_eks_cluster" "eks" {
+  name = "jenkins-eks-cluster"
+}
+
+data "aws_eks_cluster_auth" "eks" {
+  name = data.jenkins-eks-cluster.name
+}
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
@@ -55,3 +62,5 @@ resource "aws_security_group" "eks_sg" {
     Name = "eks_security_group"
   }
 }
+
+
