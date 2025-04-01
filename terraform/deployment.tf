@@ -28,10 +28,6 @@ resource "kubernetes_deployment" "app" {
       }
     }
   }
-depends_on = [
-    module.eks,
-    module.eks_worker
-  ]
 }
 
 resource "kubernetes_service" "app" {
@@ -48,8 +44,4 @@ resource "kubernetes_service" "app" {
     }
     type = "LoadBalancer"
   }
-depends_on = [
-    module.eks,
-    module.eks_worker
-  ]
 }
