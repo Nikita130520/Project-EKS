@@ -2,7 +2,7 @@
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "jenkins-eks-cluster-1"
+  cluster_name    = "jenkins-eks-cluster"
   cluster_version = "1.27"
   vpc_id          = "vpc-02ed5a76fdcf53cf0"
   subnet_ids = [
