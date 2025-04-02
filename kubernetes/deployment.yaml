@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-app1
+  name: myapp
   labels:
-    app: demo
+    app: myapp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: demo
+      app: myapp
   template:
     metadata:
       labels:
-        app: demo
+        app: myapp
     spec:
       containers:
-      - name: demo-app
+      - name: myapp
         image: nikitanand/demo
         ports:
         - containerPort: 80
