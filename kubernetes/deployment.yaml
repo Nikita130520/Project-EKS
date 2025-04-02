@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: demo-app
-        image: nginx:latest
+        image: nikitanand/demo
         ports:
         - containerPort: 80
 
