@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: nikitanand/demo
+        image: nginx:latest
         ports:
         - containerPort: 80
 
