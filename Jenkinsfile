@@ -8,7 +8,6 @@ pipeline {
     }
 
     stages {
-        
         stage('Setup AWS Credentials') {
             steps {
                 sh '''
@@ -24,19 +23,28 @@ pipeline {
 
         stage('Initialize Terraform') {
             steps {
-                sh 'terraform init'
+                sh '''
+                cd terraform
+                terraform init
+                '''
             }
         }
 
         stage('Plan Terraform') {
             steps {
-                sh 'terraform plan -out=tfplan'
+                sh '''
+                cd terraform
+                terraform plan -out=tfplan
+                '''
             }
         }
 
         stage('Apply Terraform') {
             steps {
-                sh 'terraform destroy -auto-approve'
+                sh '''
+                cd terraform
+                terraform apply -auto-approve
+                '''
             }
         }
 
@@ -51,18 +59,20 @@ pipeline {
 
         stage('Deploy to EKS') {
             steps {
-                sh 'kubectl apply -f kubernetes/deployment.yaml'
-                sh 'kubectl apply -f kubernetes/service.yaml'
+                sh '''
+                kubectl apply -f kubernetes/deployment.yaml
+                kubectl apply -f kubernetes/service.yaml
+                '''
             }
         }
     }
 
     post {
         success {
-            echo "Deployment Successful!"
+            echo "✅ Deployment Successful!"
         }
         failure {
-            echo "Deployment Failed!"
+            echo "❌ Deployment Failed! Check logs for details."
         }
     }
 }
