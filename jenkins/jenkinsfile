@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'ap-south-1'
-        CLUSTER_NAME = 'jenkins-eks-cluster'
+        CLUSTER_NAME = 'my-eks-cluster'
         AWS_CREDENTIALS = credentials('AWS_CREDENTIALS') // Load AWS keys
     }
 
