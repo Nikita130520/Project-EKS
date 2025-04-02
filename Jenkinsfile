@@ -2,50 +2,60 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'ap-south-1'
+        AWS_REGION = 'us-east-1'
         CLUSTER_NAME = 'jenkins-eks-cluster'
-        AWS_CREDENTIALS = credentials('AWS_CREDENTIALS') // Load AWS keys
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY')   // Store in Jenkins credentials
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY')
     }
 
     stages {
-        stage('Setup AWS Credentials') {
+        stage('Checkout Code') {
             steps {
-                sh '''
-                echo "$AWS_CREDENTIALS" > aws_credentials.txt
-                export $(cat aws_credentials.txt | xargs)
-                aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                aws configure set region $AWS_REGION
-                rm -f aws_credentials.txt
-                '''
+                git 'https://github.com/your-repo/terraform-eks.git'
             }
         }
 
         stage('Initialize Terraform') {
             steps {
-                sh '''
-                cd terraform
-                terraform init
-                '''
+                sh 'terraform init'
             }
         }
 
         stage('Plan Terraform') {
             steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
+
+        stage('Apply Terraform') {
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+
+        stage('Configure Kubeconfig') {
+            steps {
                 sh '''
-                cd terraform
-                terraform plan -out=tfplan
+                aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+                kubectl cluster-info
                 '''
             }
         }
 
-        stage('apply Terraform') {
+        stage('Deploy to EKS') {
             steps {
-                sh '''
-                cd terraform
-                terraform apply -auto-approve
-                '''
+                sh 'kubectl apply -f kubernetes/deployment.yaml'
+                sh 'kubectl apply -f kubernetes/service.yaml'
             }
         }
-   }
+    }
+
+    post {
+        success {
+            echo "Deployment Successful!"
+        }
+        failure {
+            echo "Deployment Failed!"
+        }
+    }
 }
