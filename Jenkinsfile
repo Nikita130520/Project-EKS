@@ -43,36 +43,9 @@ pipeline {
             steps {
                 sh '''
                 cd terraform
-                terraform apply -auto-approve
+                terraform destroy -auto-approve
                 '''
             }
-        }
-
-        stage('Configure Kubeconfig') {
-            steps {
-                sh '''
-                aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
-                kubectl cluster-info
-                '''
-            }
-        }
-
-        stage('Deploy to EKS') {
-            steps {
-                sh '''
-                kubectl apply -f kubernetes/deployment.yaml
-                kubectl apply -f kubernetes/service.yaml
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo "✅ Deployment Successful!"
-        }
-        failure {
-            echo "❌ Deployment Failed! Check logs for details."
         }
     }
 }
