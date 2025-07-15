@@ -34,7 +34,7 @@ module "eks" {
 resource "aws_security_group" "eks_sg" {
   name        = "eks_security_group"
   description = "Security group allowing all traffic for debugging"
-  vpc_id      = "vpc-02ed5a76fdcf53cf0"
+  vpc_id      = "vpc-0658fa45bcc2e39ea"
 
   # Allow ALL inbound traffic from anywhere
   ingress {
