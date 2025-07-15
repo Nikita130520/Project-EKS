@@ -14,6 +14,7 @@ module "eks" {
   # Use custom security group
   cluster_security_group_id = aws_security_group.eks_sg.id
   cluster_endpoint_public_access  = true
+  cluster_endpoint_private_access = false
 
 
   eks_managed_node_groups = {
