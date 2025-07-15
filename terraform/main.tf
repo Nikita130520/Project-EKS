@@ -17,24 +17,10 @@ module "eks" {
   # ✅ This enables Terraform to manage the aws-auth configmap
   manage_aws_auth_configmap = true
 
-  # ✅ Add the IAM role or user you're using (e.g., EC2 Role or Root user)
-  aws_auth_users = [
-    {
-      userarn  = "arn:aws:iam::768343849409:root"
-      username = "root"
-      groups   = ["system:masters"]
-    }
-  ]
+  
+  
 
-  # Optional: if your EC2 or Jenkins is using an IAM role
-  aws_auth_roles = [
-    {
-      rolearn  = "arn:aws:iam::768343849409:role/ec2-admin-role" 
-      username = "admin"
-      groups   = ["system:masters"]
-    }
-  ]
-
+  
   eks_managed_node_groups = {
     eks_nodes = {
       desired_size   = 2
